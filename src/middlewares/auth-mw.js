@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
+const logger = require("../helpers/logger");
 
-module.exports = basicAuth;
+module.exports = auth;
 
-async function basicAuth(req, res, next) {
+async function auth(req, res, next) {
   // make authenticate path public
   if (req.path === "/api/auth/login") {
     return next();
@@ -20,7 +21,7 @@ async function basicAuth(req, res, next) {
     const decoded = jwt.verify(token, config.TOKEN_KEY);
     req.user = decoded;
   } catch (err) {
-    console.log("🚀 ~ file: basic-auth.js ~ line 25 ~ basicAuth ~ err", err);
+    logger.error(`[auth] error: ${err}`);
     return res.status(401).send("Invalid Token");
   }
   return next();
