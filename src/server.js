@@ -18,9 +18,9 @@ app.use(auth);
 app.use("/api/auth", require("./routes/public/auth-router"));
 
 // private api routes
-// app.use("/api/people", require("./routes/private/people-router"));
-// app.use("/api/planets", require("./routes/private/planets-router"));
-// app.use("/api/starships", require("./routes/private/starships-router"));
+app.use("/api/people", require("./routes/private/people-router"));
+app.use("/api/planets", require("./routes/private/planets-router"));
+app.use("/api/starships", require("./routes/private/starships-router"));
 
 // global error handler
 app.use(errorHandler);
