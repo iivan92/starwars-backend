@@ -1,4 +1,6 @@
-﻿// users hardcoded for simplicity
+﻿const jwt = require("jsonwebtoken");
+
+// users hardcoded for simplicity
 const users = [
   {
     id: 1,
@@ -31,6 +33,10 @@ module.exports = {
 async function authenticate({ email, password }) {
   const user = users.find((u) => u.email === email && u.password === password);
   if (user) {
+    const token = jwt.sign({ email }, process.env.TOKEN_KEY, {
+      expiresIn: "2h",
+    });
+    user.token = token;
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
   }

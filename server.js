@@ -1,4 +1,5 @@
 ﻿require("rootpath")();
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -20,7 +21,8 @@ app.use("/api/auth", require("./users/users.controller"));
 app.use(errorHandler);
 
 // start server
-const port = process.env.NODE_ENV === "production" ? 80 : 3001;
+const { API_PORT, NODE_ENV } = process.env;
+const port = NODE_ENV === "production" ? 80 : API_PORT;
 const server = app.listen(port, function () {
   console.log("Server listening on port " + port);
 });

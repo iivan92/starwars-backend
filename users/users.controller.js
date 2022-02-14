@@ -1,10 +1,12 @@
 ﻿const express = require("express");
 const router = express.Router();
-const userService = require("./user.service");
+const userService = require("./users.service");
 
 // routes
 router.post("/login", authenticate);
-router.get("/", getAll);
+router.get("/welcome", (req, res) => {
+  res.status(200).send("Welcome 🙌 ");
+});
 
 module.exports = router;
 
@@ -13,15 +15,8 @@ function authenticate(req, res, next) {
     .authenticate(req.body)
     .then((user) =>
       user
-        ? res.json(user)
+        ? res.status(200).json(user)
         : res.status(400).json({ message: "Username or password is incorrect" })
     )
-    .catch((err) => next(err));
-}
-
-function getAll(req, res, next) {
-  userService
-    .getAll()
-    .then((users) => res.json(users))
     .catch((err) => next(err));
 }

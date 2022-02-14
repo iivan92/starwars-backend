@@ -1,4 +1,4 @@
-const userService = require("../users/user.service");
+const jwt = require("jsonwebtoken");
 
 module.exports = basicAuth;
 
@@ -8,29 +8,20 @@ async function basicAuth(req, res, next) {
     return next();
   }
 
-  // check for basic auth header
-  if (
-    !req.headers.authorization ||
-    req.headers.authorization.indexOf("Basic ") === -1
-  ) {
-    return res.status(401).json({ message: "Missing Authorization Header" });
+  const config = process.env;
+
+  const token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+
+  if (!token) {
+    return res.status(403).send("A token is required for authentication");
   }
-
-  // verify auth credentials
-  const base64Credentials = req.headers.authorization.split(" ")[1];
-  const credentials = Buffer.from(base64Credentials, "base64").toString(
-    "ascii"
-  );
-  const [email, password] = credentials.split(":");
-  const user = await userService.authenticate({ email, password });
-  if (!user) {
-    return res
-      .status(401)
-      .json({ message: "Invalid Authentication Credentials" });
+  try {
+    const decoded = jwt.verify(token, config.TOKEN_KEY);
+    req.user = decoded;
+  } catch (err) {
+    console.log("🚀 ~ file: basic-auth.js ~ line 25 ~ basicAuth ~ err", err);
+    return res.status(401).send("Invalid Token");
   }
-
-  // attach user to request object
-  req.user = user;
-
-  next();
+  return next();
 }
