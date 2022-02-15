@@ -27,7 +27,7 @@ app.use(errorHandler);
 
 // start server
 const { API_PORT, NODE_ENV } = process.env;
-const port = NODE_ENV === "production" ? 80 : API_PORT;
+const port = NODE_ENV === "production" ? process.env.PORT : API_PORT;
 const server = app.listen(port, function () {
   logger.info(`Server started at PORT ${port}`);
 });
