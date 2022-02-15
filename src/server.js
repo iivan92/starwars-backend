@@ -26,9 +26,7 @@ app.use("/api/starships", require("./routes/private/starships-router"));
 app.use(errorHandler);
 
 // start server
-const { API_PORT, NODE_ENV } = process.env;
-const port_prod = process.env.PORT || 5000;
-const port = NODE_ENV === "production" ? port_prod : API_PORT;
-const server = app.listen(port, function () {
-  logger.info(`Server started at PORT ${port}`);
+const PORT = process.env.PORT || 3001;
+const server = app.listen(PORT, function () {
+  logger.info(`Server started at PORT ${PORT}`);
 });
